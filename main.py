@@ -55,9 +55,10 @@ def run():
 # -------------------- End of Run Sequence ----------------------
 
 # User Control
-finished = 0
+def main():
+    finished = 0
 
-while finished == 0:
+    while finished == 0:
     select = raw_input("Enter 'r' to run\nEnter 'q' to quit program\n")
 
     if select == 'r':
