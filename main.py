@@ -67,3 +67,5 @@ def main():
     # Ends the program
     elif select == 'q':
         finished = 1
+
+main()
