@@ -38,7 +38,7 @@ If no input , calls a security number
 ## How to get Photos Working ##
 Will most likely give error: "IOError: decoder jpeg not available"
 
-# How to Solve: #
+#### How to Solve: ####
  - Follow second answer at [a link](http://stackoverflow.com/questions/8404956/installing-pil-with-jpeg-support-on-mac-os-x)
  - ???
  - Profit
