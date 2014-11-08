@@ -18,5 +18,27 @@ The Domestic Security System takes advantage of all the diverse features that th
 
 
 ## Part 1 ##
-Security system - Security system goes off with change of light - Timer starts going off - Person has (5s) time to input the security code.## Part 2 ##Security code - As soon as the time goes off the person’s smartphone gets a notification - Colours/ patterns get sent to the phone and  - Have to show the colour to the sensor to turn it off - Repeat 3 times with different patterns - Or have sheets of colours on the robot ## Part 3 ##
-If no input , calls a security number  - Sends a message to a phone 
+Security system
+ - Security system goes off with change of light
+ - Timer starts going off
+ - Person has (5s) time to input the security code.
+
+## Part 2 ##
+Security code
+ - As soon as the time goes off the person’s smartphone gets a notification
+ - Colours/ patterns get sent to the phone and 
+ - Have to show the colour to the sensor to turn it off
+ - Repeat 3 times with different patterns
+ - Or have sheets of colours on the robot 
+
+## Part 3 ##
+If no input , calls a security number 
+ - Sends a message to a phone 
+
+## How to get Photos Working ##
+Will most likely give error: "IOError: decoder jpeg not available"
+
+#### How to Solve: ####
+ - Follow second answer at [a link](http://stackoverflow.com/questions/8404956/installing-pil-with-jpeg-support-on-mac-os-x)
+ - ???
+ - Profit
