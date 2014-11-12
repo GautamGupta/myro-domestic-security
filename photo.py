@@ -99,7 +99,7 @@ class RobotPic:
 		print time() - curTime
 		return newPic
 
-	def findSquares(self, size, threshold, interval):
+	def findSquares(self, size, threshold, interval, color = makeColor(0, 255, 0)):
 		if not self.table:
 			self.genTable()
 		squares = []
@@ -132,16 +132,28 @@ class RobotPic:
 			y += interval
 		picBounds = [width, height, 0, 0]
 		for square in squares:
-			if picBounds[0] > squares[0]:
-				picBounds[0] = squares[0]
-			if picBounds[1] > squares[1]:
-				picBounds[1] = squares[1]
-			if picBounds[2] < squares[2]:
-				picBounds[2] = squares[2]
-			if picBounds[3] < squares[3]:
-				picBounds[3] = squares[3]
-
-
+			if picBounds[0] > square[0]:
+				picBounds[0] = square[0]
+			if picBounds[1] > square[1]:
+				picBounds[1] = square[1]
+			if picBounds[2] < square[2]:
+				picBounds[2] = square[2]
+			if picBounds[3] < square[3]:
+				picBounds[3] = square[3]
+		print picBounds
+		matrix = [[0 for y in range(picBounds[3] - picBounds[1])] for y in range(picBounds[2] - picBounds[0])]
+		for square in squares:
+			for x in range(picBounds[2] - picBounds[0]):
+				for y in range(picBounds[3] - picBounds[1]):
+					if x >= square[0] - picBounds[0] and x <= square[2] - picBounds[0] and y >= square[1] - picBounds[1] and y <= square[3] - picBounds[1]:
+						matrix[x][y] = 1;
+		print matrix
+		newPic = makePicture(picBounds[2] - picBounds[0], picBounds[3] - picBounds[1])
+		for x in range(picBounds[2] - picBounds[0]):
+			for y in range(picBounds[3] - picBounds[1]):
+				if matrix[x][y]:
+					setPixel(newPic, x, y, color)
+		show(newPic)
 
 def run():
     robotPic = RobotPic()
