@@ -27,7 +27,7 @@ class RobotPic:
 
 	# Saves "self.picture" in the same folder as the py file under the name "fileName"
 	def picSave(self, fileName):
-		if(not self.picture):
+		if not self.picture:
 			print "No picture to be saved"
 			return
 		try:
@@ -37,19 +37,19 @@ class RobotPic:
 
 	# Uses the Myro "show" function to display "self.picture" in a new windows under the name "name"
 	def picShow(self, name):
-		if(not self.picture):
+		if not self.picture:
 			print "No picture to be shown"
 			return
 		show(self.picture, name)
 
 	# Returns the grayscale version of "self.picture" using averaging algorithm
 	def getGrayScale(self):
+		if not self.picture:
+			print "No picture to be shown"
+			return
 		if not self.table:
 			self.genTable()
 		curTime = time()
-		if(not self.picture):
-			print "No picture to be analyzed"
-			return
 		width = getWidth(self.picture)
 		height = getHeight(self.picture)
 		newPic = makePicture(width, height)
@@ -61,12 +61,12 @@ class RobotPic:
 		return newPic
 
 	def getSharp(self):
+		if not self.picture:
+			print "No picture to be shown"
+			return
 		if not self.table:
 			self.genTable()
 		curTime = time()
-		if(not self.picture):
-			print "No picture to be analyzed"
-			return
 		width = getWidth(self.picture)
 		height = getHeight(self.picture)
 		newPic = makePicture(width, height)
@@ -86,6 +86,9 @@ class RobotPic:
 		return newPic
 
 	def filterGray(self, value, threshold, color = makeColor(0, 255, 0)):
+		if not self.picture:
+			print "No picture to be shown"
+			return
 		if not self.table:
 			self.genTable()
 		curTime = time()
@@ -100,6 +103,9 @@ class RobotPic:
 		return newPic
 
 	def findSquares(self, size, threshold, interval, color = makeColor(0, 255, 0)):
+		if not self.picture:
+			print "No picture to be shown"
+			return
 		if not self.table:
 			self.genTable()
 		squares = []
@@ -140,28 +146,50 @@ class RobotPic:
 				picBounds[2] = square[2]
 			if picBounds[3] < square[3]:
 				picBounds[3] = square[3]
-		print picBounds
 		matrix = [[0 for y in range(picBounds[3] - picBounds[1])] for y in range(picBounds[2] - picBounds[0])]
 		for square in squares:
 			for x in range(picBounds[2] - picBounds[0]):
 				for y in range(picBounds[3] - picBounds[1]):
 					if x >= square[0] - picBounds[0] and x <= square[2] - picBounds[0] and y >= square[1] - picBounds[1] and y <= square[3] - picBounds[1]:
 						matrix[x][y] = 1;
-		print matrix
 		newPic = makePicture(picBounds[2] - picBounds[0], picBounds[3] - picBounds[1])
 		for x in range(picBounds[2] - picBounds[0]):
 			for y in range(picBounds[3] - picBounds[1]):
 				if matrix[x][y]:
 					setPixel(newPic, x, y, color)
-		show(newPic)
+		return newPic
+
+	def getCode(self, size):
+		if not self.picture:
+			print "No picture to be shown"
+			return
+		if not self.table:
+			self.genTable()
+		width = getWidth(self.picture)
+		height = getHeight(self.picture)
+		interval_x = width / size
+		interval_y = height / size
+		matrix = [[0 for i in range(size)] for i in range(size)]
+		x = interval_x / 2
+		i = 0
+		while x < width:
+			y = interval_y / 2
+			j = 0
+			while y < height:
+				if sum(self.table[x][y]) == 255 * 3:
+					matrix[i][j] = 1
+				y += interval_y
+				j += 1
+			x += interval_x
+			i += 1
+		return matrix
 
 def run():
     robotPic = RobotPic()
     robotPic.picOpen("pic.jpg")
-    robotPic.picShow("Original")
     newPic = RobotPic(robotPic.filterGray(205, 50))
-    newPic.findSquares(130, 30, 10)
-    newPic.picShow("Filter")
+    pattern = RobotPic(newPic.findSquares(130, 30, 10))
+    print pattern.getCode(3)
     raw_input("Press \"enter\" to quit")
     return
 
