@@ -85,13 +85,72 @@ class RobotPic:
 		print time() - curTime
 		return newPic
 
+	def filterGray(self, value, threshold, color = makeColor(0, 255, 0)):
+		if not self.table:
+			self.genTable()
+		curTime = time()
+		width = getWidth(self.picture)
+		height = getHeight(self.picture)
+		newPic = makePicture(width, height)
+		for x in range (width):
+			for y in range (height):
+				if value < sum(self.table[x][y]) / 3 + threshold and value > sum(self.table[x][y]) / 3 - threshold:
+					setPixel(newPic, x, y, color)
+		print time() - curTime
+		return newPic
+
+	def findSquares(self, size, threshold, interval):
+		if not self.table:
+			self.genTable()
+		squares = []
+		width = getWidth(self.picture)
+		height = getHeight(self.picture)
+		y = size / 2
+		while y < height - size / 2:
+			x = 0
+			while x < width - size:
+				if sum(self.table[x][y]) != 255 * 3:
+					incr = -1
+					bounds = [x + size / 2, y, x + size / 2, y]
+					newBounds = bounds
+					for i in range (4):
+						bounds = [x + size / 2, y, x + size / 2, y]
+						if i > 1:
+							incr = 1
+						while sum(self.table[bounds[incr + 1]][bounds[incr + 2]]) != 255 * 3:
+							if bounds[incr + 1] > 0 and bounds[incr + 1] < width - 1 and bounds[incr + 2] > 0 and bounds[incr + 2] < height - 1:
+								bounds[i] += incr
+								newBounds[i] += incr
+							else:
+								break
+					newWidth = newBounds[2] - newBounds[0]
+					newHeight = newBounds[3] - newBounds[1]
+					if newHeight > size - threshold and newHeight < size + threshold and newWidth > size - threshold and newWidth < size + threshold:
+						squares.append(newBounds)
+					x = newBounds[2]
+				x += 1
+			y += interval
+		picBounds = [width, height, 0, 0]
+		for square in squares:
+			if picBounds[0] > squares[0]:
+				picBounds[0] = squares[0]
+			if picBounds[1] > squares[1]:
+				picBounds[1] = squares[1]
+			if picBounds[2] < squares[2]:
+				picBounds[2] = squares[2]
+			if picBounds[3] < squares[3]:
+				picBounds[3] = squares[3]
+
+
+
 def run():
-	robotPic = RobotPic()
-	robotPic.picOpen("pic.jpg")
-	robotPic.picShow("Color")
-	newPic = RobotPic(robotPic.getGrayScale())
-	newPic.picShow("Gray")
-	raw_input("Press \"enter\" to quit")
-	return
+    robotPic = RobotPic()
+    robotPic.picOpen("pic.jpg")
+    robotPic.picShow("Original")
+    newPic = RobotPic(robotPic.filterGray(205, 50))
+    newPic.findSquares(130, 30, 10)
+    newPic.picShow("Filter")
+    raw_input("Press \"enter\" to quit")
+    return
 
 run()
