@@ -1,5 +1,6 @@
 from myro import *
 from time import time
+from photo import RobotPic
 
 # Robot class
 class Guatmobile:

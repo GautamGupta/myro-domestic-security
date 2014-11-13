@@ -1,18 +1,21 @@
 from myro import *
 from time import time
 from guat import Guatmobile
+from photo import RobotPic
 
 # -------------------- Start of Run Sequence ----------------------
 
 # Main function that runs the sequence for the robot
 def run():
 
-    # Initialize
-    robot = Guatmobile()
-
-    # Loop until the light turns on
-    robot.checkBright()
-    # Turn back to correct angle
+    robotPic = RobotPic()
+    robotPic.picTake("gray")
+    robotPic.picShow("Gray")
+    robotPic = RobotPic(robotPic.filterGray(100, 100))
+    robotPic.picShow("Filtered")
+    pattern = RobotPic(robotPic.findSquares(120, 20, 10))
+    pattern.picShow("Pattern")
+    print pattern.getCode(3)
 
 # -------------------- End of Run Sequence ----------------------
 

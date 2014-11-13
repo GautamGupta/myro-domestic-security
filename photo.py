@@ -49,7 +49,6 @@ class RobotPic:
 			return
 		if not self.table:
 			self.genTable()
-		curTime = time()
 		width = getWidth(self.picture)
 		height = getHeight(self.picture)
 		newPic = makePicture(width, height)
@@ -57,7 +56,6 @@ class RobotPic:
 			for y in range (height):
 				value = sum(self.table[x][y]) / 3
 				setPixel(newPic, x, y, makeColor(value, value, value))
-		print time() - curTime
 		return newPic
 
 	def getSharp(self):
@@ -66,7 +64,6 @@ class RobotPic:
 			return
 		if not self.table:
 			self.genTable()
-		curTime = time()
 		width = getWidth(self.picture)
 		height = getHeight(self.picture)
 		newPic = makePicture(width, height)
@@ -82,7 +79,6 @@ class RobotPic:
 					sumGreen -= self.table[x + matrix[z][0]][y + matrix[z][1]][1]
 					sumBlue -= self.table[x + matrix[z][0]][y + matrix[z][1]][2]
 				setPixel(newPic, x, y, makeColor(sumRed, sumGreen, sumBlue))
-		print time() - curTime
 		return newPic
 
 	def filterGray(self, value, threshold, color = makeColor(0, 255, 0)):
@@ -91,7 +87,6 @@ class RobotPic:
 			return
 		if not self.table:
 			self.genTable()
-		curTime = time()
 		width = getWidth(self.picture)
 		height = getHeight(self.picture)
 		newPic = makePicture(width, height)
@@ -99,7 +94,6 @@ class RobotPic:
 			for y in range (height):
 				if value < sum(self.table[x][y]) / 3 + threshold and value > sum(self.table[x][y]) / 3 - threshold:
 					setPixel(newPic, x, y, color)
-		print time() - curTime
 		return newPic
 
 	def findSquares(self, size, threshold, interval, color = makeColor(0, 255, 0)):
@@ -136,6 +130,9 @@ class RobotPic:
 					x = newBounds[2]
 				x += 1
 			y += interval
+		if not squares:
+			print "Did not find squares"
+			return None
 		picBounds = [width, height, 0, 0]
 		for square in squares:
 			if picBounds[0] > square[0]:
@@ -170,17 +167,17 @@ class RobotPic:
 		interval_x = width / size
 		interval_y = height / size
 		matrix = [[0 for i in range(size)] for i in range(size)]
-		x = interval_x / 2
+		y = interval_y / 2
 		i = 0
-		while x < width:
-			y = interval_y / 2
+		while y < height:
+			x = interval_x / 2
 			j = 0
-			while y < height:
-				if sum(self.table[x][y]) == 255 * 3:
+			while x < width:
+				if sum(self.table[x][y]) != 255 * 3:
 					matrix[i][j] = 1
-				y += interval_y
+				x += interval_x
 				j += 1
-			x += interval_x
+			y += interval_y
 			i += 1
 		return matrix
 
@@ -189,8 +186,9 @@ def run():
     robotPic.picOpen("pic.jpg")
     newPic = RobotPic(robotPic.filterGray(205, 50))
     pattern = RobotPic(newPic.findSquares(130, 30, 10))
+    pattern.picShow("Pattern")
     print pattern.getCode(3)
     raw_input("Press \"enter\" to quit")
     return
 
-run()
+# run()
