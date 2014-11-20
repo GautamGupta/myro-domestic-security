@@ -59,12 +59,12 @@ class Guatmobile:
                 print code
                 print html
                 if code == html:
-                    request = urllib2.Request(self.url + "2" + self.check + "1")
+                    request = urllib2.Request("http://myro-robot.appspot.com/2?check=1")
                     response = urllib2.urlopen(request)
                     return True
 
             if (time() - self.beginTime >= 60):
-                request = urllib2.Request(self.url + "2" + self.check + "0")
+                request = urllib2.Request("http://myro-robot.appspot.com/2?check=0")
                 response = urllib2.urlopen(request)
                 beep(3, 880)
                 self.endTime()

@@ -21,8 +21,14 @@ def run():
             print html
             request = urllib2.Request("http://myro-robot.appspot.com/2?check=1")
             response = urllib2.urlopen(request)
+            html = response.read()
+            html = ast.literal_eval(html)
+            print html
             request = urllib2.Request("http://myro-robot.appspot.com/2?check=0")
             response = urllib2.urlopen(request)
+            html = response.read()
+            html = ast.literal_eval(html)
+            print html
             """sleep(2)
             speak("Taking Picture")
             robotPic = RobotPic()
