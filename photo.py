@@ -7,6 +7,7 @@ class RobotPic:
 	def __init__(self, picObject = None):
 		self.picture = picObject
 		self.table = None
+		self.grid = None
 
 	def genTable(self):
 		self.table = [[getRGB(self.picture.getPixel(x,y)) for y in range (getHeight(self.picture))] for x in range(getWidth(self.picture))]
@@ -149,24 +150,29 @@ class RobotPic:
 				for y in range(picBounds[3] - picBounds[1]):
 					if x >= square[0] - picBounds[0] and x <= square[2] - picBounds[0] and y >= square[1] - picBounds[1] and y <= square[3] - picBounds[1]:
 						matrix[x][y] = 1;
-		newPic = makePicture(picBounds[2] - picBounds[0], picBounds[3] - picBounds[1])
+		self.grid = matrix
+		return matrix
+		"""newPic = makePicture(picBounds[2] - picBounds[0], picBounds[3] - picBounds[1])
 		for x in range(picBounds[2] - picBounds[0]):
 			for y in range(picBounds[3] - picBounds[1]):
 				if matrix[x][y]:
 					setPixel(newPic, x, y, color)
-		return newPic
+		return newPic"""
 
 	def getCode(self, size):
-		if not self.picture:
+		"""if not self.picture:
 			print "No picture to be shown"
+			return"""
+		if not self.grid:
+			print "No grid exists"
 			return
-		if not self.table:
-			self.genTable()
-		width = getWidth(self.picture)
-		height = getHeight(self.picture)
+		"""width = getWidth(self.picture)
+		height = getHeight(self.picture)"""
+		width = len(self.table)
+		height = len(self.table[0])
 		interval_x = width / size
 		interval_y = height / size
-		matrix = [[0 for i in range(size)] for i in range(size)]
+		matrix = [0 for i in range(size * size)]
 		y = interval_y / 2
 		i = 0
 		while y < height:
@@ -174,12 +180,23 @@ class RobotPic:
 			j = 0
 			while x < width:
 				if sum(self.table[x][y]) != 255 * 3:
-					matrix[i][j] = 1
+					matrix[i * size + j] = 1
 				x += interval_x
 				j += 1
 			y += interval_y
 			i += 1
 		return matrix
+
+	def gridShow(self, color = makeColor(0, 255, 0)):
+		if not self.grid:
+			print "No grid exists"
+			return
+		newPic = makePicture(len(self.grid), len(self.grid[0]))
+		for x in range(len(self.grid)):
+			for y in range(len(self.grid[0])):
+				if self.grid[x][y]:
+					setPixel(newPic, x, y, color)
+		show(newPic)
 
 def run():
     robotPic = RobotPic()
