@@ -168,8 +168,10 @@ class RobotPic:
 			return
 		"""width = getWidth(self.picture)
 		height = getHeight(self.picture)"""
-		width = len(self.table)
-		height = len(self.table[0])
+		width = len(self.grid)
+		height = len(self.grid[0])
+		print width
+		print height
 		interval_x = width / size
 		interval_y = height / size
 		matrix = [0 for i in range(size * size)]
@@ -179,7 +181,7 @@ class RobotPic:
 			x = interval_x / 2
 			j = 0
 			while x < width:
-				if sum(self.table[x][y]) != 255 * 3:
+				if self.grid[x][y]:
 					matrix[i * size + j] = 1
 				x += interval_x
 				j += 1

@@ -10,6 +10,7 @@ class Guatmobile:
 
     url = "http://myro-robot.appspot.com"
     key = "/?key=6969"
+    check = "?check="
 
     # Logic Variables
     beginTime = 0
@@ -28,14 +29,13 @@ class Guatmobile:
 
         done = 0;
 
-        request = urllib2.Request(self.url + self.key)
-        response = urllib2.urlopen(request)
-        html = response.read()
-        html = ast.literal_eval(html)
-
         while done == 0:
             if (getObstacle('center') > 4000):
                 speak("Alarm on")
+                request = urllib2.Request(self.url + self.key)
+                response = urllib2.urlopen(request)
+                html = response.read()
+                html = ast.literal_eval(html)
                 self.startTime()
                 beep(0.2, 880)
                 beep(0.1, 880)
@@ -54,13 +54,18 @@ class Guatmobile:
                 robotPic = RobotPic()
                 robotPic.picTake("gray")
                 robotPic = RobotPic(robotPic.filterGray(100, 100))
-                robotPic.findSquares(130, 20, 10)
+                robotPic.findSquares(120, 20, 10)
                 code = robotPic.getCode(3)
                 print code
+                print html
                 if code == html:
+                    request = urllib2.Request(self.url + "2" + self.check + "1")
+                    response = urllib2.urlopen(request)
                     return True
 
             if (time() - self.beginTime >= 60):
+                request = urllib2.Request(self.url + "2" + self.check + "0")
+                response = urllib2.urlopen(request)
                 beep(3, 880)
                 self.endTime()
                 return False
@@ -73,14 +78,4 @@ class Guatmobile:
             beep(0.3, 960)
             beep(0.3, 960)
             if(getObstacle('center') > 0):
-                sleep(2)
-                speak("Taking Picture")
-                robotPic = RobotPic()
-                robotPic.picTake("gray")
-                robotPic = RobotPic(robotPic.filterGray(100, 100))
-                robotPic.findSquares(130, 20, 10)
-                robotPic.gridShow()
-                code = robotPic.getCode(3)
-                print code
-                if code == html:
-                    return True
+                return True

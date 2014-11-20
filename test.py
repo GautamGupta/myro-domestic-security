@@ -2,6 +2,8 @@ from myro import *
 from time import *
 from guat import Guatmobile
 from photo import RobotPic
+import urllib2
+import ast
 
 # -------------------- Start of Run Sequence ----------------------
 
@@ -12,19 +14,30 @@ def run():
     
     while not done:
         if(getObstacle('center') > 0):
-            sleep(2)
+            request = urllib2.Request("http://myro-robot.appspot.com/?key=6969")
+            response = urllib2.urlopen(request)
+            html = response.read()
+            html = ast.literal_eval(html)
+            print html
+            request = urllib2.Request("http://myro-robot.appspot.com/2?check=1")
+            response = urllib2.urlopen(request)
+            request = urllib2.Request("http://myro-robot.appspot.com/2?check=0")
+            response = urllib2.urlopen(request)
+            """sleep(2)
             speak("Taking Picture")
             robotPic = RobotPic()
             robotPic.picTake("gray")
             #speak("Took Picture")
             robotPic = RobotPic(robotPic.filterGray(100, 100))
-            #robotPic.picShow("Gray")
+            robotPic.picShow("Gray")
             #speak("Filtered Picture")
-            robotPic.findSquares(130, 20, 10)
+            robotPic.findSquares(120, 20, 10)
             #speak("Searched For Squares")
             robotPic.gridShow()
             code = robotPic.getCode(3)
-            print code
+            print html
+            print code"""
+
             done = True
 
 # -------------------- End of Run Sequence ----------------------
